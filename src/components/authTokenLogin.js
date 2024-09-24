@@ -1,4 +1,3 @@
-// src/components/AuthTokenLogin.js
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +6,6 @@ function LoginPage() {
     const [usernameOrEmail, setUsernameOrEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async () => {
@@ -18,10 +16,13 @@ function LoginPage() {
             });
 
             // save the token in localStorage
-            localStorage.setItem("authToken", response.data.token);
-            alert("Login successful!");
-            setIsLoggedIn(true);
-            navigate("/search");
+            if (response.status === 200 && response.data.token) {
+                localStorage.setItem("authToken", response.data.token);
+                alert("Login successful!");
+                navigate("/search");
+            } else {
+                setError("Login Failed. Please try again.")
+            }
 
         } catch (err) {
             setError("Invalid credentials. Please try again.");
