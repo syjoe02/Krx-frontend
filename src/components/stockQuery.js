@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axiosInstance from "../api/axiosInstance";
+import { companyListContainer, companyItem, selectedItem, inputBox, button } from '../utils/styles';
 
 function StockQuery() {
     const [query, setQuery] = useState("");
@@ -29,41 +30,6 @@ function StockQuery() {
         }
     };
 
-    const styles = {
-        companyListContainer: {
-            maxHeight: "200px",
-            overflowY: "scroll",
-            border: "1px solid #ccc",
-            padding: "10px",
-            margin: "10px 0",
-            width: "300px",
-        },
-        companyItem: {
-            padding: "10px",
-            cursor: "pointer",
-            borderBottom: "1px solid #eee",
-            display: "flex",
-            justifyContent: "space-between",
-        },
-        selectedItem: {
-            backgroundColor: "#d3f9d8",
-        },
-        inputBox: {
-            width: "400px",
-            padding: "10px",
-            fontSize: "16px",
-            marginBottom: "10px",
-        },
-        button: {
-            padding: "10px 20px",
-            backgroundColor: "#4CAF50",
-            color: "#fff",
-            border: "none",
-            cursor: "pointer",
-            fontSize: "16px",
-        },
-    };
-
     return (
         <div style={{ display: 'flex', flexDirection: 'column', width: '300px', margin: '0 auto' }}>
             <h1>Stock Query Search</h1>
@@ -72,14 +38,14 @@ function StockQuery() {
             {step === 1 && (
                 <>
                     <textarea
-                        style={styles.inputBox}
+                        style={inputBox}
                         placeholder="'When did Apple stock price exceed 120?'"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         rows={4}
                     />
                     <br />
-                    <button style={styles.button} onClick={handleSubmitQuery}>
+                    <button style={button} onClick={handleSubmitQuery}>
                         Check Answer
                     </button>
                 </>
@@ -88,15 +54,15 @@ function StockQuery() {
             {/* Step 2: Let the user choose the company and ticker */}
             {step === 2 && (
                 <>
-                    <div style={styles.companyListContainer}>
+                    <div style={companyListContainer}>
                         <h2>Select Company</h2>
                         {companies.length > 0 ? (
                             companies.map((company, index) => (
                                 <div
                                     key={index}
                                     style={{
-                                        ...styles.companyItem,
-                                        ...(selectedCompany === company ? styles.selectedItem : {}),
+                                        ...companyItem,
+                                        ...(selectedCompany === company ? selectedItem : {}),
                                     }}
                                     onClick={() => setSelectedCompany(company)}
                                 >
@@ -120,7 +86,7 @@ function StockQuery() {
                     )}
 
                     {/* Final answer button */}
-                    <button style={styles.button} onClick={handleFinalAnswer}>
+                    <button style={button} onClick={handleFinalAnswer}>
                         Submit Answer
                     </button>
                 </>
