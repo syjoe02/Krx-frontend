@@ -2,15 +2,18 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function LoginPage() {
+function LoginPage({ setIsAuthenticated }) {
     // state variables to hold the user input and error messages
     const [usernameOrEmail, setUsernameOrEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    // redirect the user to a different page
+    // redirect the user to /search page
     const navigate = useNavigate();
 
     const handleLogin = async () => {
+        // clear error state before making a login attempt
+        setError("");
+
         try {
             // await (Asynchronous operation) and we wait for the response from the server
             const response = await axios.post("http://127.0.0.1:8000/auth/token/login/", {
@@ -22,8 +25,13 @@ function LoginPage() {
             // save the token in localStorage
             if (response.status === 200 && response.data.token) {
                 localStorage.setItem("authToken", response.data.token);
+                // update auth state before redirecting
+                setIsAuthenticated(true)
                 alert("Login successful!");
-                navigate("/search");
+                // add a light delay to ensure  token storage, then navigate
+                setTimeout(() => {
+                    navigate("/search");
+                }, 100); // 100ms delay
             } else {
                 setError("Login Failed. Please try again.")
             }

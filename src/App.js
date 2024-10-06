@@ -5,6 +5,7 @@ import SignUp from './components/signUp';
 import StockQuery from './components/stockQuery';
 import StockDataSearch from './components/stockDataSearch';
 import LoggoutButton from './components/logoutButton';
+import { navbar, navContent, logo, navLink, pageContent } from './utils/styles';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("authToken")); // check login status
@@ -12,8 +13,13 @@ function App() {
   const [selectedPrice, setSeletedPrice] = useState("");
 
   useEffect(() => {
-    setIsAuthenticated(!!localStorage.getItem("authToken"));
-  }, []);
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, []); // Runs only once when the component mounts
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
@@ -29,26 +35,25 @@ function App() {
     <Router>
       <div>
         {/* NavBar */}
-        <nav style={styles.navbar}>
-          <div style={styles.navContent}>
-            <h1 style={styles.logo}>Stock Query App</h1>
+        <nav style={navbar}>
+          <div style={navContent}>
+            <h1 style={logo}>Stock Query App</h1>
             <div>
               {isAuthenticated ? (
                 <LoggoutButton onLogout={handleLogout} />
               ) : (
-                <Link to="/signup" style={styles.navLink}>Sign Up</Link>
+                <Link to="/signup" style={navLink}>Sign Up</Link>
               )}
             </div>
           </div>
         </nav>
 
-        {/* 페이지 콘텐츠 */}
-        <div style={styles.pageContent}>
+        <div style={pageContent}>
           <Routes>
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} />} />
             <Route path="/signup" element={<SignUp />} />
 
-            {/* 보호된 경로 */}
+            {/* auth */}
             <Route
               path="/search"
               element={
@@ -79,46 +84,5 @@ function App() {
     </Router>
   );
 }
-
-const styles = {
-  navbar: {
-    width: '100%',
-    height: '60px',
-    backgroundColor: '#f8f9fa',
-    borderBottom: '2px solid #ccc',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'fixed',
-    top: 0,
-    zIndex: 1000,
-  },
-  navContent: {
-    width: '100%',
-    maxWidth: '1200px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  logo: {
-    margin: 0,
-    padding: '0 20px',
-    fontSize: '24px',
-  },
-  navLink: {
-    padding: '10px 20px',
-    textDecoration: 'none',
-    color: '#007bff',
-    backgroundColor: '#f8f9fa',
-    border: '1px solid #007bff',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  },
-  pageContent: {
-    marginTop: '70px', // 상단 네비게이션 바 공간 확보
-    padding: '20px',
-  },
-};
-
 
 export default App;
