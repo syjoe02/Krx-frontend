@@ -3,14 +3,11 @@ import { BrowserRouter as Router, Route, Routes, Navigate, Link } from 'react-ro
 import LoginPage from './components/authTokenLogin';
 import SignUp from './components/signUp';
 import StockQuery from './components/stockQuery';
-import StockDataSearch from './components/stockDataSearch';
 import LoggoutButton from './components/logoutButton';
 import { navbar, navContent, logo, navLink, pageContent } from './utils/styles';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem("authToken")); // check login status
-  const [selectedTicker, setSelectedTicker] = useState(null);
-  const [selectedPrice, setSeletedPrice] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -24,11 +21,6 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     setIsAuthenticated(false);
-  };
-
-  const handleCompanySelection = (ticker, price) => {
-    setSelectedTicker(ticker);
-    setSeletedPrice(price);
   };
 
   return (
@@ -58,21 +50,7 @@ function App() {
               path="/search"
               element={
                 isAuthenticated ? (
-                  <StockQuery onCompanySelected={handleCompanySelection} />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route
-              path="/"
-              element={
-                isAuthenticated ? (
-                  selectedTicker && selectedPrice ? (
-                    <StockDataSearch ticker={selectedTicker} price={selectedPrice} />
-                  ) : (
-                    <div>Please make a selection from the query page.</div>
-                  )
+                  <StockQuery />
                 ) : (
                   <Navigate to="/login" />
                 )
