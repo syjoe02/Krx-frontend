@@ -23,6 +23,8 @@
 
     The use inputs a question in natural language (ENG). From this, the company name, ticker symobl, and the stock price are extracted
 
+    ![alt text](./readme_screenshot/step1.png)
+
 - Step 2
 
     A list of similar company names is displayed.
@@ -31,6 +33,10 @@
 
     To select the correct company, the ticker symbol is shown next to each company
 
-### 4. Stock Data Search ###
+    ![alt text](./readme_screenshot/step2.png)
 
-- Using the accurate data selected above, the desired stock information is retrieved using `yfinance`
+- Step 3
+
+    Using the accurate data selected above, the desired stock information is retrieved using `yfinance`
+
+    ![alt text](./readme_screenshot/step3.png)
